@@ -27,12 +27,12 @@ import static org.hamcrest.Matchers.isA;
 public class HelloWorldRouteTest {
 
     @BeforeAll
-    public static void setup() throws Exception {
+    public static void setup() {
         RestAssured.port = 54768;
     }
 
     @Test
-    public void testHelloCallExternalAPI() {
+    public void testHelloWorld() {
         given()
             .when()
                 .get("/api/hello-world")
