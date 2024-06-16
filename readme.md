@@ -3,5 +3,8 @@
 ## Documentation
 
 ```
-https://access.redhat.com/documentation/en-us/red_hat_integration/2023.q2/html-single/getting_started_with_camel_spring_boot/index
+https://access.redhat.com/documentation/id-id/red_hat_build_of_apache_camel/4.4
 ```
+
+## Concept
+Opening a REST API JSON and

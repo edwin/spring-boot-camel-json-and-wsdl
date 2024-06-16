@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class EmployeeRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
+        // define employee api
         rest()
             .get("/employee/{id}")
                 .produces(MediaType.APPLICATION_JSON_VALUE)
@@ -30,10 +31,18 @@ public class EmployeeRoute extends RouteBuilder {
             .routeId("get-employee-api")
             .log("calling get-employee to wsdl")
             .process(exchange -> {
+                // get the employee-id from path variable
+                String id = (String) exchange.getIn().getHeader("id");
                 exchange.getIn().getHeaders().clear();
-                exchange.getOut().setBody(new EmployeeByIdRequest());
+
+                // set the employee-id to wsdl request
+                EmployeeByIdRequest employeeByIdRequest = new EmployeeByIdRequest();
+                employeeByIdRequest.setId(Long.parseLong(id));
+                exchange.getOut().setBody(employeeByIdRequest);
             })
+            // soap request
             .to("cxf:bean:employeeServiceEndpoint")
+            // process the response
             .process(exchange -> {
                 exchange.getIn().getHeaders().clear();
                 EmployeeResponse employeeResponse = (EmployeeResponse) ((MessageContentsList) exchange.getIn().getBody()).get(0);

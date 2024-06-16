@@ -6,8 +6,6 @@ import org.apache.camel.component.cxf.spring.jaxws.CxfSpringEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import javax.xml.namespace.QName;
-
 /**
  * <pre>
  *  com.edw.service.EmployeeService
