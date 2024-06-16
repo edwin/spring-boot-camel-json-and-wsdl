@@ -24,7 +24,11 @@ public class EmployeeRoute extends RouteBuilder {
             .get("/employee")
                 .produces(MediaType.APPLICATION_JSON_VALUE)
                     .type(Employee.class)
-                    .to("direct:get-all-employee");
+                    .to("direct:get-all-employee")
+            .get("/employee/{id}")
+                .produces(MediaType.APPLICATION_JSON_VALUE)
+                .   type(Employee.class)
+                        .to("direct:get-employee");
 
         from("direct:get-all-employee")
                 .routeId("get-all-employee-api")
@@ -45,6 +49,25 @@ public class EmployeeRoute extends RouteBuilder {
                                             .employeeId("002")
                                     .build()
                             )
+                        )
+                )
+                .marshal().json(JsonLibrary.Jackson);
+
+
+        from("direct:get-employee")
+                .routeId("get-employee-api")
+                .log("calling get-employee")
+                .process(
+                        exchange -> exchange.getMessage().setBody(
+                                        Employee
+                                                .builder()
+                                                .employeeAge(31)
+                                                .employeeName("Edwin")
+                                                .employeeId(
+                                                        exchange.getIn()
+                                                                .getHeader("id").toString()
+                                                )
+                                            .build()
                         )
                 )
                 .marshal().json(JsonLibrary.Jackson);
