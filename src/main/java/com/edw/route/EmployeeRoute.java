@@ -27,6 +27,7 @@ public class EmployeeRoute extends RouteBuilder {
                     .type(EmployeeResponse.class)
                         .to("direct:get-employee");
 
+        // get one employee
         from("direct:get-employee")
             .routeId("get-employee-api")
             .log("calling get-employee to wsdl")
@@ -41,7 +42,7 @@ public class EmployeeRoute extends RouteBuilder {
                 exchange.getOut().setBody(employeeByIdRequest);
             })
             // soap request
-            .to("cxf:bean:employeeServiceEndpoint")
+            .to("cxf:bean:employeeServiceEndpoint_getEmployeeById")
             // process the response
             .process(exchange -> {
                 exchange.getIn().getHeaders().clear();
