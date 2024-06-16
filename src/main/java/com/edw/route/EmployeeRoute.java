@@ -1,12 +1,12 @@
 package com.edw.route;
 
-import com.edw.bean.Employee;
+import com.edw.soap.EmployeeByIdRequest;
+import com.edw.soap.EmployeeResponse;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
+import org.apache.cxf.message.MessageContentsList;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-
-import java.util.Arrays;
 
 /**
  * <pre>
@@ -21,55 +21,26 @@ public class EmployeeRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         rest()
-            .get("/employee")
-                .produces(MediaType.APPLICATION_JSON_VALUE)
-                    .type(Employee.class)
-                    .to("direct:get-all-employee")
             .get("/employee/{id}")
                 .produces(MediaType.APPLICATION_JSON_VALUE)
-                .   type(Employee.class)
+                    .type(EmployeeResponse.class)
                         .to("direct:get-employee");
 
-        from("direct:get-all-employee")
-                .routeId("get-all-employee-api")
-                .log("calling get-all-employee")
-                .process(
-                    exchange -> exchange.getMessage().setBody(
-                            Arrays.asList(
-                                    Employee
-                                        .builder()
-                                            .employeeAge(31)
-                                            .employeeName("Edwin")
-                                            .employeeId("001")
-                                    .build(),
-                                    Employee
-                                        .builder()
-                                            .employeeAge(28)
-                                            .employeeName("Someone")
-                                            .employeeId("002")
-                                    .build()
-                            )
-                        )
-                )
-                .marshal().json(JsonLibrary.Jackson);
-
-
         from("direct:get-employee")
-                .routeId("get-employee-api")
-                .log("calling get-employee")
-                .process(
-                        exchange -> exchange.getMessage().setBody(
-                                        Employee
-                                                .builder()
-                                                .employeeAge(31)
-                                                .employeeName("Edwin")
-                                                .employeeId(
-                                                        exchange.getIn()
-                                                                .getHeader("id").toString()
-                                                )
-                                            .build()
-                        )
-                )
-                .marshal().json(JsonLibrary.Jackson);
+            .routeId("get-employee-api")
+            .log("calling get-employee to wsdl")
+            .process(exchange -> {
+                exchange.getIn().getHeaders().clear();
+                exchange.getOut().setBody(new EmployeeByIdRequest());
+            })
+            .to("cxf:bean:employeeServiceEndpoint")
+            .process(exchange -> {
+                exchange.getIn().getHeaders().clear();
+                EmployeeResponse employeeResponse = (EmployeeResponse) ((MessageContentsList) exchange.getIn().getBody()).get(0);
+                exchange.getOut().setBody(employeeResponse);
+            })
+            .log("sending response get-employee to frontend as json")
+            .marshal()
+                .json(JsonLibrary.Jackson);
     }
 }
