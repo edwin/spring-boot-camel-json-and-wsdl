@@ -1,9 +1,24 @@
-# Spring Boot and Camel 3
+# Spring Boot and Camel 4
 
 ## Documentation
-
 ```
 https://access.redhat.com/documentation/id-id/red_hat_build_of_apache_camel/4.4
+```
+
+## Camel Version
+We are using `Apache Camel` version `4.4.0`
+```xml
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.redhat.camel.springboot.platform</groupId>
+                <artifactId>camel-spring-boot-bom</artifactId>
+                <version>4.4.0.redhat-00014</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 ```
 
 ## Concept
