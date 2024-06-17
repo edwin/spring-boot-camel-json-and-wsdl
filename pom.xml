@@ -13,6 +13,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-boot.camel.version>4.4.0.redhat-00014</spring-boot.camel.version>
+        <hawtio.version>4.0.0.redhat-00072</hawtio.version>
     </properties>
 
     <dependencyManagement>
@@ -21,6 +22,13 @@
                 <groupId>com.redhat.camel.springboot.platform</groupId>
                 <artifactId>camel-spring-boot-bom</artifactId>
                 <version>${spring-boot.camel.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.hawt</groupId>
+                <artifactId>hawtio-bom</artifactId>
+                <version>${hawtio.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -80,6 +88,20 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- hawtio -->
+        <dependency>
+            <groupId>io.hawt</groupId>
+            <artifactId>hawtio-springboot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-management-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-spring-boot-xml-starter</artifactId>
         </dependency>
 
         <!-- test -->
