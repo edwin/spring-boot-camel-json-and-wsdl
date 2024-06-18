@@ -2,9 +2,14 @@ package com.edw.route;
 
 import io.restassured.RestAssured;
 import org.apache.camel.test.spring.junit5.CamelSpringBootTest;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
@@ -19,19 +24,22 @@ import static org.hamcrest.Matchers.isA;
  * 16 Jun 2024 15:32
  */
 @CamelSpringBootTest
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,
-        properties = {
-            "server.port=54768"
-        }
-)
+@ExtendWith(SpringExtension.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DisplayName("01. Testing Index Page")
 public class HelloWorldRouteTest {
 
-    @BeforeAll
-    public static void setup() {
-        RestAssured.port = 54768;
+    @LocalServerPort
+    private int port;
+
+    @BeforeEach
+    public void setUp() {
+        RestAssured.port = this.port;
     }
 
     @Test
+    @DisplayName("01. Test Hello World Page should give 200")
     public void testHelloWorld() {
         given()
             .when()
