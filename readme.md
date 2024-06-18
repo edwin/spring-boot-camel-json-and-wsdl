@@ -219,3 +219,8 @@ $ curl -kv http://localhost:8080/api/employees/edwin/kun
 	</xs:element>
 </xs:schema>
 ```
+
+## Hawtio Monitoring
+Opening `http://localhost:8080/actuator/hawtio` will open Hawtio console where we can see the statistics of our Camel routes
+
+![Hawtio Dashboard](images/hawtio01.png)
